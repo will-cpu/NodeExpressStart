@@ -1,27 +1,15 @@
 const express = require("express");
-
+const AuthController = require("./controllers/authController");
+const authGuard = require("./middleware/auth-guard");
 const router = express.Router();
 
-data = [
-    {user1: "test"},
-    {user2: "bob"},
-    {user3: "jim"}
-]
 
 
-router.get('', (req, res, next) => {
-    res.status(200).json({
-        message: "Data fetched successfully!",
-        data: data
-      });
-});
+router.post('/signup', AuthController.createUser);
+router.post('/login', AuthController.login);
 
-router.post('',  (req, res, next) => {
-    console.log(req.body);
-    data.push(req.body);
-    res.status(200).json({
-        message: "Data posted successfully!",
-      });
-});
+router.use(authGuard);
+
+router.get('/users', AuthController.getUsers);
 
 module.exports = router;
